@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Text.Json;
 using WebApplication1.Models;
 
@@ -18,8 +19,8 @@ namespace WebApplication1.Controllers
         public async Task<IActionResult> Index()
         {
             var resp = await _httpClient.GetAsync("api/Autor");
-            var contenido = resp.Content.ReadAsStringAsync();
-            List<Autor> lista = JsonSerializer.Deserialize <List<Autor>> (contenido.Result);
+            var contenido = resp.Content.ReadAsStringAsync().Result;
+            List<Autor> lista = JsonConvert.DeserializeObject <List<Autor>> (contenido);
             return View(await Task.Run(() => lista));
         }
 
