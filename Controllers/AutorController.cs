@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
+using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
@@ -11,6 +13,14 @@ namespace WebApplication1.Controllers
         {
             _httpClient = httpClient;
             _httpClient.BaseAddress = new Uri(apiBase);
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var resp = await _httpClient.GetAsync("api/Autor");
+            var contenido = resp.Content.ReadAsStringAsync();
+            List<Autor> lista = JsonSerializer.Deserialize <List<Autor>> (contenido.Result);
+            return View(await Task.Run(() => lista));
         }
 
         
